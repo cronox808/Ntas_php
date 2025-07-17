@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Formulario con POST</title>
+</head>
+
+<body>
+    <h2>Formulario usando POST</h2>
+    <form method="POST" action="http://localhost:8080/">
+        <label>Nombre:</label>
+        <input type="text" name="nombre">
+        <br><br>
+ 
+        <label>Nombre:</label>
+        <input type="text" name="Name">
+        <input type="text" name="Edad">
+        <br><br>
+        <input type="submit" value="Enviar">
+    </form>
+    <form method="POST" enctype="multipart/form-data" action="http://localhost:8080/">
+        <input type="file" name="mi_archivo">
+        <input type="submit" value="Subir">
+    </form>|
+</body>
+
+</html>
