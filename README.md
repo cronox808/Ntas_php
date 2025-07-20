@@ -1251,32 +1251,190 @@ echo $_ENV["APP_ENV"];
 
 ---
 
-### 🔹 1. `fopen()`, `fwrite()`, `fread()`, `fclose()`
+### 🛠 Constantes útiles
 
-Estas funciones son las más usadas para abrir, escribir, leer y cerrar archivos.
+| Constante | Significado |
+| --- | --- |
+| `__FILE__` | Muestra la ruta completa del archivo actual |
+| `__DIR__` | Muestra el directorio donde está el script actual |
+
+### Ejemplo:
 
 ```php
-$archivo = fopen("archivo.txt", "w"); // w = escritura
-fwrite($archivo, "Hola mundo desde PHP\n");
-fclose($archivo);
-
+echo "Archivo: " . __FILE__ . "<br>";
+echo "Directorio: " . __DIR__;
 ```
-
-🔧 Modos más usados en `fopen()`:
-
-| Modo | Significado |
-| --- | --- |
-| `"r"` | Leer (error si no existe) |
-| `"w"` | Escribir (sobrescribe si existe) |
-| `"a"` | Agregar (append al final del archivo) |
-| `"r+"` | Leer y escribir (sin truncar) |
 
 ---
 
-### 🔹 2. Leer archivos línea por línea
+## 🔹 1. Introducción al Manejo de Archivos en PHP
+
+### 📘 ¿Qué es un archivo en contexto del servidor?
+
+En PHP, un **archivo** es cualquier documento (texto, imagen, CSV, PDF, etc.) ubicado en el sistema de archivos del servidor. PHP puede:
+
+- Leer archivos existentes 📖
+- Crear nuevos archivos 🧾
+- Modificar contenido ✏️
+- Borrarlos 🗑️
+- Organizarlos en carpetas 📁
+
+---
+
+### 🧭 Rutas: **Relativas vs Absolutas**
+
+| Tipo | Ejemplo | Significado |
+| --- | --- | --- |
+| Relativa | `"datos.txt"` | Desde el archivo PHP actual |
+| Relativa | `"../carpeta/archivo.txt"` | Sube un nivel y entra a "carpeta" |
+| Absoluta | `"/var/www/html/datos.txt"` | Ruta completa desde el sistema del servidor |
+| PHP | `__FILE__`, `__DIR__` | Constantes para conocer la ubicación actual del script |
+
+✅ Recomendación: Usa rutas relativas o `__DIR__` para mantener compatibilidad.
+
+---
+
+### 📂 Permisos
+
+Para trabajar con archivos, la carpeta debe tener permisos de escritura:
+
+- En sistemas Linux (como Docker):
+    
+    ```bash
+    chmod 755 carpeta
+    chmod 644 archivo.txt
+    
+    ```
+    
+- PHP puede detectar esto con:
+    
+    ```php
+    is_writable("carpeta") // true o false
+    
+    ```
+    
+
+---
+
+## 🔹 2. Funciones básicas de manejo de archivos
+
+PHP tiene varias funciones nativas para **leer, escribir y manipular archivos**. Vamos a ver las más importantes con explicación clara y ejemplos.
+
+---
+
+### ✅ `fopen()`: Abrir un archivo
 
 ```php
-$archivo = fopen("archivo.txt", "r");
+$archivo = fopen("datos.txt", "r");
+
+```
+
+- **Primer parámetro**: nombre o ruta del archivo.
+- **Segundo parámetro**: modo de apertura.
+
+| Modo | Significado |
+| --- | --- |
+| `"r"` | Leer. El archivo debe existir. |
+| `"w"` | Escribir. Borra el contenido anterior. |
+| `"a"` | Agregar. Escribe al final sin borrar nada. |
+| `"x"` | Crear nuevo archivo. Falla si ya existe. |
+| `"r+"` | Leer y escribir. No borra contenido. |
+
+---
+
+### ✅ `fwrite()`: Escribir en archivo
+
+```php
+$archivo = fopen("datos.txt", "w");
+fwrite($archivo, "Hola Mundo!");
+fclose($archivo); // ¡Importante!
+
+```
+
+> 🔒 Siempre debes cerrar el archivo con fclose() para liberar recursos.
+> 
+
+---
+
+### ✅ `fread()`: Leer contenido del archivo
+
+```php
+$archivo = fopen("datos.txt", "r");
+$contenido = fread($archivo, filesize("datos.txt"));
+fclose($archivo);
+
+echo $contenido;
+
+```
+
+> filesize() devuelve la longitud del archivo (en bytes).
+> 
+
+---
+
+### ✅ `file_get_contents()`: Leer archivo completo (más simple)
+
+```php
+$contenido = file_get_contents("datos.txt");
+echo $contenido;
+
+```
+
+> Esta función es más directa y recomendable si solo necesitas leer.
+> 
+
+---
+
+### ✅ `file_put_contents()`: Escribir directamente (más simple)
+
+```php
+file_put_contents("datos.txt", "Texto nuevo");
+
+```
+
+- Si el archivo existe, lo sobrescribe.
+- Si no existe, lo crea.
+
+---
+
+### 🧪 Ejercicio práctico sugerido
+
+Crea un archivo `test_archivos.php` con este código:
+
+```php
+<?php
+// Escribir texto
+file_put_contents("prueba.txt", "Hola Jose\n");
+
+// Agregar otra línea
+file_put_contents("prueba.txt", "Otra línea más\n", FILE_APPEND);
+
+// Leer el contenido
+$contenido = file_get_contents("prueba.txt");
+
+echo "<pre>$contenido</pre>";
+?>
+
+```
+
+Esto:
+
+1. Crea o sobrescribe `prueba.txt`
+2. Agrega una segunda línea
+3. Lee y muestra el contenido
+
+---
+
+## 🔹 3. Leer archivos línea por línea: `fgets()` y `feof()`
+
+Este método es ideal cuando quieres **leer un archivo línea por línea**, por ejemplo para procesar logs, datos CSV o texto estructurado.
+
+---
+
+### ✅ `fgets()`: Lee una línea del archivo
+
+```php
+$archivo = fopen("datos.txt", "r");
 
 while (!feof($archivo)) {
     $linea = fgets($archivo);
@@ -1287,58 +1445,57 @@ fclose($archivo);
 
 ```
 
-- `feof()` → devuelve `true` cuando llega al final del archivo
-- `fgets()` → obtiene una línea
+---
+
+### 🧠 ¿Qué hace esto?
+
+- `fopen("datos.txt", "r")`: abre el archivo en modo lectura.
+- `!feof($archivo)`: verifica si **no se llegó al final del archivo**.
+- `fgets($archivo)`: lee la **siguiente línea**.
+- `fclose($archivo)`: cierra el archivo al final.
 
 ---
 
-### 🔹 3. `file_exists()` y `unlink()`
+### ✅ Ejemplo real con archivo `alumnos.txt`
 
-- Verifica si un archivo existe antes de abrirlo o modificarlo.
-- `unlink()` elimina archivos.
+Supón que tienes este archivo con contenido:
+
+```
+Ana,18
+Carlos,19
+Laura,20
+
+```
+
+Este código:
 
 ```php
-if (file_exists("archivo.txt")) {
-    unlink("archivo.txt");
-    echo "Archivo eliminado.";
+<?php
+$archivo = fopen("alumnos.txt", "r");
+
+while (!feof($archivo)) {
+    $linea = fgets($archivo);
+    echo "Línea: $linea <br>";
 }
 
-```
-
----
-
-### 🔹 4. Subir archivos con formularios (`$_FILES`)
-
-```html
-<form method="POST" enctype="multipart/form-data" action="subir.php">
-  <input type="file" name="archivo">
-  <input type="submit" value="Subir">
-</form>
+fclose($archivo);
+?>
 
 ```
+
+📋 Mostrará:
+
+```
+Línea: Ana,18
+Línea: Carlos,19
+Línea: Laura,20
+
+```
+
+> ⚠️ A veces se lee una última línea vacía por el salto final. Puedes evitarlo con:
+> 
 
 ```php
-$archivo = $_FILES["archivo"];
-move_uploaded_file($archivo["tmp_name"], "uploads/" . $archivo["name"]);
-echo "Archivo subido correctamente";
+if (trim($linea) !== "") { ... }
 
 ```
-
-✅ **Reglas de seguridad:**
-
-- Validar el tipo de archivo (`mime`)
-- Validar tamaño
-- Evitar nombres maliciosos
-- Usar carpetas seguras (`/uploads`)
-
----
-
-### 🔹 5. Leer archivos completos (rápido)
-
-```php
-$contenido = file_get_contents("archivo.txt");
-echo $contenido;
-
-```
-
----

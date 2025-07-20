@@ -148,17 +148,19 @@ echo "Info del navegador: ".$_SERVER["HTTP_USER_AGENT"]. "<br>";
 
 // subir.php
 $archivo = $_FILES["mi_archivo"];
-echo "el archivo se llama: ".$archivo["name"]; // Nombre del archivo
+echo "el archivo se llama: ".$archivo["name"]."<br>"; // Nombre del archivo
 
-//funciona mas con login y/o carritos
-session_start();
-$_SESSION["usuario"] = "JoseDev";
-echo "Bienvenido, " . $_SESSION["usuario"];
+//$archivito = fopen("datos.txt", "a");
+//fwrite($archivito, " hola mundo");
+//fclose($archivito);
 
-// Crear una cookie que dura 1 hora
-setcookie("tema", "oscuro", time() + 3600);
+$archivito1 = fopen("datos.txt", "r");
+$contenido = fread($archivito1, filesize("datos.txt"));
+fclose($archivito1);
 
-// Leer cookie
-if (isset($_COOKIE["tema"])) {
-    echo "Tema: " . $_COOKIE["tema"];
-}
+echo "la longitud en byts es: ".filesize("datos.txt")."<br>";
+
+echo $contenido."<br>";
+
+$contenidos = file_get_contents("datos.txt");
+echo $contenidos."<br>";
