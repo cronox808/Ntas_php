@@ -192,4 +192,21 @@ while (!feof($usuarios)) {
 
 echo $renglon;
 
-unlink("usuarios.txt");
+if (file_exists("usuarios.txt")) {
+    unlink("usuarios.txt");
+    echo "archivo eliminado";
+}else {
+    echo "el archivo no existe o ya fue eliminado";
+}
+
+rename("prueba.txt", "mispruebas.txt");
+
+mkdir("archivos", 0777);
+mkdir("usuarios/cronox808/perfil", 0777, true);
+
+if (is_dir("archivos")){
+    echo "la carpeta existe";
+} else{
+    mkdir("archivos");
+    echo "como no se encontro se creo una carpeta nueva";
+}

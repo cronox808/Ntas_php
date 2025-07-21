@@ -1,3 +1,4 @@
+## PHP
 PHP (PHP: Hypertext Preprocessor) es un
 
 **lenguaje de programación de código abierto y de propósito general, especialmente diseñado para el desarrollo web**
@@ -1499,3 +1500,180 @@ Línea: Laura,20
 if (trim($linea) !== "") { ... }
 
 ```
+
+---
+
+## 🔹 4. Eliminar, renombrar y copiar archivos en PHP
+
+Estas operaciones son **muy útiles para gestionar archivos del servidor**, por ejemplo: borrar temporales, renombrar fotos subidas o hacer backups.
+
+---
+
+### ✅ Eliminar archivos con `unlink()`
+
+```php
+unlink("archivo.txt");
+
+```
+
+📌 Elimina un archivo. Si no existe, da un **warning**.
+
+🔐 Consejo: Antes de eliminar, verifica que el archivo existe:
+
+```php
+if (file_exists("archivo.txt")) {
+    unlink("archivo.txt");
+    echo "Archivo eliminado";
+} else {
+    echo "El archivo no existe";
+}
+
+```
+
+---
+
+### ✅ Renombrar archivos con `rename()`
+
+```php
+rename("original.txt", "nuevo_nombre.txt");
+
+```
+
+📌 Cambia el nombre o incluso **mueve el archivo** a otra carpeta.
+
+🔁 También sirve para mover:
+
+```php
+rename("carpeta1/archivo.txt", "carpeta2/archivo.txt");
+
+```
+
+---
+
+### ✅ Copiar archivos con `copy()`
+
+```php
+copy("original.txt", "copia.txt");
+
+```
+
+📌 Hace una copia idéntica del archivo.
+
+Puedes verificar si la copia fue exitosa:
+
+```php
+if (copy("datos.txt", "respaldo.txt")) {
+    echo "Archivo copiado";
+} else {
+    echo "Error al copiar";
+}
+
+```
+
+---
+
+## 🔹 5. Crear, verificar y eliminar carpetas (directorios)
+
+Trabajar con directorios es útil para organizar archivos por tipo, usuario, fechas, etc.
+
+---
+
+### ✅ Crear carpetas con `mkdir()`
+
+```php
+mkdir("archivos");
+
+```
+
+📌 Crea una carpeta llamada `archivos` en la ruta actual.
+
+🔒 También puedes darle permisos (modo UNIX):
+
+```php
+mkdir("documentos", 0777);
+
+```
+
+📁 Crear carpetas **anidadas** (recursivas):
+
+```php
+mkdir("usuarios/cronox808/perfil", 0777, true);
+
+```
+
+---
+
+### ✅ Verificar si una carpeta existe: `is_dir()`
+
+```php
+if (is_dir("archivos")) {
+    echo "La carpeta ya existe";
+} else {
+    mkdir("archivos");
+}
+
+```
+
+📌 Muy útil para evitar errores si intentas crear algo ya existente.
+
+---
+
+### ✅ Eliminar carpetas vacías: `rmdir()`
+
+```php
+rmdir("archivos");
+
+```
+
+📌 Solo funciona si la carpeta está vacía.
+
+---
+
+## 🔹 6. Leer carpetas con `opendir()`, `readdir()` y `closedir()`
+
+Estos métodos te permiten **explorar los archivos dentro de una carpeta**, útil para mostrar listas de archivos, cargar configuraciones, etc.
+
+---
+
+### ✅ Leer el contenido de un directorio
+
+```php
+$dir = "usuarios"; // Ruta a la carpeta
+
+if (is_dir($dir)) {
+    if ($gestor = opendir($dir)) {
+        while (($archivo = readdir($gestor)) !== false) {
+            echo "Archivo: $archivo <br>";
+        }
+        closedir($gestor);
+    }
+}
+
+```
+
+📌 Este código:
+
+- Verifica si el directorio existe.
+- Lo abre con `opendir()`.
+- Usa un `while` y `readdir()` para **leer archivo por archivo**.
+- Finalmente cierra el directorio con `closedir()`.
+
+---
+
+### 🔍 ¿Qué devuelven `readdir()` y `opendir()`?
+
+- `readdir()` devuelve el **nombre del archivo** o carpeta (como string).
+- Devuelve también `"."` y `".."` que son carpetas internas del sistema (actual y padre).
+
+---
+
+### 🧹 Evitar `.` y `..`
+
+```php
+if ($archivo != "." && $archivo != "..") {
+    echo "Archivo válido: $archivo <br>";
+}
+
+```
+
+---
