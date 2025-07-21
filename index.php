@@ -150,6 +150,7 @@ echo "Info del navegador: ".$_SERVER["HTTP_USER_AGENT"]. "<br>";
 $archivo = $_FILES["mi_archivo"];
 echo "el archivo se llama: ".$archivo["name"]."<br>"; // Nombre del archivo
 
+//manejo de archivos en php
 //$archivito = fopen("datos.txt", "a");
 //fwrite($archivito, " hola mundo");
 //fclose($archivito);
@@ -164,3 +165,31 @@ echo $contenido."<br>";
 
 $contenidos = file_get_contents("datos.txt");
 echo $contenidos."<br>";
+
+file_put_contents("prueba.txt", "hola cronox\n ");
+
+file_put_contents("prueba.txt", "esta es otra linea mas\n", FILE_APPEND);
+
+$contenido1 = file_get_contents("prueba.txt");
+
+echo "<pre>$contenido1</pre>";
+
+$lineas = fopen("datos.txt", "r");
+
+while (!feof($lineas)){
+    $linea= fgets($lineas);
+    echo $linea . "<br>";
+}
+
+fclose($lineas);
+
+$usuarios = fopen("usuarios.txt", "r");
+
+while (!feof($usuarios)) {
+    $renglon = fgets($usuarios);
+    echo $renglon . "<br>";
+}
+
+echo $renglon;
+
+unlink("usuarios.txt");
