@@ -1677,3 +1677,179 @@ if ($archivo != "." && $archivo != "..") {
 ```
 
 ---
+
+Perfecto, Jose David. Vamos entonces con el **Módulo 9: Programación Orientada a Objetos (POO) en PHP**, uno de los pilares clave para estructurar código profesional y escalable.
+
+---
+
+# 🧠 **Programación Orientada a Objetos (POO) en PHP**
+
+---
+
+## 🔹 PARTE 1: Fundamentos de la POO
+
+### 📌 ¿Qué es la Programación Orientada a Objetos?
+
+Es un paradigma de programación que organiza el código en **clases** (plantillas) y **objetos** (instancias de esas plantillas). En lugar de escribir funciones sueltas, encapsulas datos y comportamientos en objetos.
+
+---
+
+### 📚 Conceptos clave:
+
+| Concepto | Descripción |
+| --- | --- |
+| **Clase** | Es una plantilla que define las propiedades (variables) y métodos (funciones) que un objeto tendrá. |
+| **Objeto** | Instancia de una clase. Es un ejemplar con valores concretos. |
+| **Propiedades** | Variables dentro de la clase (estado del objeto). |
+| **Métodos** | Funciones dentro de la clase (comportamiento del objeto). |
+| **Constructor** | Método especial que se ejecuta automáticamente al crear un objeto. Se llama `__construct()`. |
+| **Encapsulamiento** | Controla el acceso a las propiedades/métodos mediante `public`, `private` y `protected`. |
+| **Herencia** | Permite que una clase herede características de otra. |
+| **`$this`** | Hace referencia al objeto actual dentro de una clase. |
+
+---
+
+## 🔸 PARTE 2: Ejemplo básico explicativo
+
+```php
+<?php
+// Definimos una clase llamada Coche
+class Coche {
+    public $marca;
+    public $color;
+
+    // Constructor
+    public function __construct($marca, $color) {
+        $this->marca = $marca;
+        $this->color = $color;
+    }
+
+    // Método
+    public function arrancar() {
+        echo "El coche $this->marca está arrancando<br>";
+    }
+}
+
+// Crear un objeto
+$miCoche = new Coche("Toyota", "Rojo");
+$miCoche->arrancar();  // Llama al método
+?>
+
+```
+
+### 🧠 ¿Qué pasó aquí?
+
+- Creamos una clase con propiedades `$marca` y `$color`.
+- Creamos un constructor para establecer valores al crear el objeto.
+- Definimos un método `arrancar()`.
+- Creamos un objeto `$miCoche` y usamos `>` para acceder a sus métodos.
+
+---
+
+### 🔐 Visibilidad de propiedades y métodos
+
+| Palabra clave | Acceso desde... | ¿Permite herencia? |
+| --- | --- | --- |
+| `public` | En cualquier lugar | ✅ |
+| `private` | Solo dentro de la misma clase | ❌ |
+| `protected` | Dentro de la clase y sus hijas | ✅ |
+
+---
+
+### ✅`$this` en PHP
+
+### 📘 Teoría
+
+En PHP, `$this` es una palabra clave que hace referencia al **objeto actual** dentro de una clase. Se utiliza para acceder a **propiedades y métodos** del mismo objeto dentro de su propia clase.
+
+### 🧠 ¿Por qué es útil?
+
+Permite diferenciar entre propiedades de la clase y parámetros o variables locales que puedan tener el mismo nombre.
+
+### 📌 Sintaxis
+
+```php
+$this->nombrePropiedad;
+$this->nombreMetodo();
+
+```
+
+### 🧪 Ejemplo
+
+```php
+class Persona {
+    public $nombre;
+
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;  // 'this' se refiere al objeto actual
+    }
+
+    public function saludar() {
+        echo "Hola, mi nombre es " . $this->nombre;
+    }
+}
+
+$p = new Persona();
+$p->setNombre("Jose");
+$p->saludar();  // Salida: Hola, mi nombre es Jose
+
+```
+
+### 🧩 Explicación
+
+- `$this->nombre = $nombre;` está diciendo: *la propiedad `nombre` del objeto actual será igual al parámetro `$nombre` que recibe la función.*
+
+---
+
+Excelente. Continuamos entonces con el siguiente tema del **Módulo 9: Programación Orientada a Objetos (POO) en PHP**.
+
+---
+
+### ✅ Tema 6: `__destruct()` – Destructor en PHP
+
+### 📘 Teoría
+
+El método mágico `__destruct()` es llamado automáticamente **cuando un objeto deja de estar en uso**, ya sea porque el script termina, porque se eliminó explícitamente el objeto con `unset()`, o porque fue sobrescrito.
+
+Sirve para **liberar recursos**, **cerrar conexiones** o **registrar actividades** justo antes de que el objeto desaparezca.
+
+### 📌 Sintaxis
+
+```php
+public function __destruct() {
+    // Código que se ejecuta al destruir el objeto
+}
+
+```
+
+### 🧪 Ejemplo práctico
+
+```php
+class ConexionBD {
+    public function __construct() {
+        echo "Conectando a la base de datos...<br>";
+    }
+
+    public function __destruct() {
+        echo "Cerrando conexión con la base de datos...<br>";
+    }
+}
+
+$conexion = new ConexionBD();
+
+echo "Haciendo consultas a la base de datos...<br>";
+
+// Cuando termina el script, se llama automáticamente al destructor
+
+```
+
+### 🧩 Salida esperada
+
+```
+Conectando a la base de datos...
+Haciendo consultas a la base de datos...
+Cerrando conexión con la base de datos...
+
+```
+
+---
