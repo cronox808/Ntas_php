@@ -54,3 +54,32 @@ class ConexionDB {
 
 $conexiones = new ConexionDB();
  echo "Haciendo consultas en la base de datos<br>";
+
+ //piblic
+ class usuario {
+    public $nombre = "Jose";
+
+    public function saludar() {
+        return "Hola, soy ".$this->nombre;
+    }
+ }
+
+ $u = new Usuario();
+ echo $u->nombre."<br>"; // salida esperada: Jose
+ echo $u->saludar()."<br>"; // salida esperada: Hola, soy Jose
+
+ //private
+ class UsuarioPrivado {
+    private $clave = "secreta123";
+
+    public function verClave(){
+        return "La clave es: ". $this->clave; //apesar de no poder intrar a clave, podemos ver su contenido con una funcion dentro de la clsae, la cual si puede acceder a el
+    }   
+ }
+
+ $up = new UsuarioPrivado();
+ //echo $up->clave;  Esto generará un error, ya que 'clave' es privada y no se puede acceder directamente
+ echo $up->verClave()."<br>"; // salida esperada: La clave es: secreta123
+
+    //protected
+class UsuarioProtegido 
